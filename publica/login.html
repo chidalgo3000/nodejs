@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Simple login</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script>
+    $(document).ready(function() {
+
+
+                var token = "";
+
+                $("#login").click(function() {
+
+
+                    var usuario = {
+                        nombre: $("#nombre").val(),
+                        clave: $("#clave").val()
+                    };
+
+                    $.ajax({
+                        url: 'login',
+                        type: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(usuario),
+                        success: function(data) {
+
+                        token=data;
+                        console.log(token);  
+
+                        },
+                        error:function(error) {
+
+                          console.log(error);
+                        }
+
+                    });
+
+                });
+
+                $("#noticias").click(function() {
+
+
+                    $.ajax({
+                        url: 'noticias',
+                        type: 'get',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        beforeSend: function(xhr) {
+
+                            console.log(token);
+
+                            xhr.setRequestHeader("Accept", "application/json");
+                            xhr.setRequestHeader("Authorization", "Bearer "+token);
+                        },
+
+                    });
+                });
+
+            });
+
+    </script>
+  </head>
+  <body>
+    <h1>Hello people !</h1>
+    <input type="TEXT" id="nombre" size="40"><br>
+    <input type="password" id="clave" size="40"><br>
+    <input type="button" id="login" value="login">
+    <input type="button" id="noticias" value="noticias">
+  </body>
+</html>
